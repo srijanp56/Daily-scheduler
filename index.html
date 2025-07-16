@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Schedule Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Daily Schedule Planner</h1>
+            <p>Organize your day with fixed routines and flexible tasks</p>
+            <div class="calendar-container">
+                <input type="date" id="selectedDate">
+                <span id="currentDay"></span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>Fixed Schedule</h3>
+                <div class="fixed-schedule" id="fixedScheduleDisplay">
+                    </div>
+                
+                <div class="task-input">
+                    <h4>⚙️ Customize Fixed Schedule</h4>
+                    <div class="input-group">
+                        <input type="time" id="fixedTime" placeholder="Start time">
+                        <input type="number" id="fixedDuration" placeholder="Duration (hours)" min="0.5" max="12" step="0.5">
+                    </div>
+                    <input type="text" id="fixedActivity" placeholder="Activity (e.g., Morning Workout)" style="width: 100%; margin-bottom: 10px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                    <div class="input-group">
+                        <button class="add-btn" onclick="addFixedActivity()">Add to Schedule</button>
+                        <button class="add-btn" onclick="resetToDefault()" style="background: #e74c3c;">Reset Default</button>
+                    </div>
+                </div>
+
+                <div class="task-input">
+                    <h4>Add Daily Task</h4>
+                    <div class="input-group">
+                        <input type="text" id="taskName" placeholder="Task name (e.g., Study Math)">
+                        <input type="number" id="taskDuration" placeholder="Duration (hours)" min="0.5" max="6" step="0.5">
+                    </div>
+                    <div class="priority-group">
+                        <label for="taskPriority">Priority:</label>
+                        <select id="taskPriority">
+                            <option value="high">🔥 High Priority</option>
+                            <option value="medium" selected>⚡ Medium Priority</option>
+                            <option value="low">📝 Low Priority</option>
+                        </select>
+                    </div>
+                    <button class="add-btn" onclick="addTask()">Add Task</button>
+                </div>
+
+                <div class="task-input">
+                    <h4>Your Tasks Today</h4>
+                    <div id="taskList"></div>
+                </div>
+            </div>
+
+            <div class="schedule-display">
+                <h3>📋 Today's Complete Schedule</h3>
+                <div class="timeline" id="timeline"></div>
+            </div>
+
+            <div class="right-panel">
+                <div class="motivation-section">
+                    <div class="quote-text" id="motivationalQuote">
+                        "The future depends on what you do today!"
+                    </div>
+                    <div class="quote-author" id="quoteAuthor">
+                        - Mahatma Gandhi
+                    </div>
+                    <button class="new-quote-btn" onclick="getNewQuote()">✨ New Quote</button>
+                </div>
+
+                <div class="notes-section">
+                    <h4>📝 Today's Notes</h4>
+                    <textarea 
+                        class="notes-textarea" 
+                        id="dailyNotes" 
+                        placeholder="Write your thoughts, goals, or reminders for today..."
+                        onchange="saveNotes()"
+                    ></textarea>
+                </div>
+
+                <div class="mood-tracker">
+                    <h4>😊 How are you feeling?</h4>
+                    <div class="mood-options">
+                        <span class="mood-emoji" data-mood="excited" onclick="setMood('excited')" title="Excited">🤩</span>
+                        <span class="mood-emoji" data-mood="happy" onclick="setMood('happy')" title="Happy">😊</span>
+                        <span class="mood-emoji" data-mood="neutral" onclick="setMood('neutral')" title="Neutral">😐</span>
+                        <span class="mood-emoji" data-mood="tired" onclick="setMood('tired')" title="Tired">😴</span>
+                        <span class="mood-emoji" data-mood="stressed" onclick="setMood('stressed')" title="Stressed">😰</span>
+                    </div>
+                    <div id="moodMessage" style="text-align: center; color: #666; font-size: 0.9em;"></div>
+                </div>
+
+                <div class="stats-section">
+                    <h4>📊 Today's Stats</h4>
+                    <div class="stat-item">
+                        <span class="stat-label">📅 Tasks Added</span>
+                        <span class="stat-value" id="tasksCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">⏰ Total Task Time</span>
+                        <span class="stat-value" id="totalTime">0h</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">🔥 High Priority</span>
+                        <span class="stat-value" id="highPriorityCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">🆓 Free Time</span>
+                        <span class="stat-value" id="freeTime">0h</span>
+                    </div>
+                    <div class="productivity-bar">
+                        <div class="productivity-fill" id="productivityFill"></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #666;">
+                        Productivity: <span id="productivityPercent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
