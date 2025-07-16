@@ -1,3 +1,21 @@
+Okay, I will make your `style.css` file fully responsive by enhancing the existing media queries and adding more specific adjustments for various screen sizes, especially mobile. I'll also incorporate the "cooler" color scheme you liked from before.
+
+This will involve:
+
+1.  **Updating the color palette** to the cooler gradients.
+2.  **Refining existing media queries** (`1024px`, `768px`) to adjust more elements.
+3.  **Adding a smaller breakpoint** (`480px`) for very small phone screens.
+4.  **Adjusting `font-size`, `padding`, `margin`, `gap`, and element dimensions** within these queries to ensure proper scaling and readability.
+5.  **Ensuring elements flow correctly** by leveraging Flexbox and Grid properties.
+
+Here's your updated and responsive `style.css` file:
+
+-----
+
+### `style.css` (Updated for Full Responsiveness)
+
+```css
+/* General Styling */
 * {
     margin: 0;
     padding: 0;
@@ -6,113 +24,146 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Cooler gradient: deep blue to vibrant purple */
+    background: linear-gradient(135deg, #2a2a72 0%, #009ffd 100%); 
     min-height: 100vh;
     padding: 20px;
+    display: flex; /* Use flexbox for body to center content */
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
     max-width: 1200px;
+    width: 100%; /* Ensure it takes full width up to max-width */
     margin: 0 auto;
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-radius: 25px; /* Slightly more rounded corners */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2); /* Stronger shadow */
     overflow: hidden;
+    display: flex; /* Use flex for internal layout */
+    flex-direction: column;
 }
 
+/* Header */
 .header {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    /* More dynamic gradient for header */
+    background: linear-gradient(135deg, #fc6767 0%, #ec008c 100%);
     color: white;
-    padding: 30px;
+    padding: 40px 30px; /* Increased padding */
     text-align: center;
+    position: relative; /* For potential absolute positioning of elements */
 }
 
 .header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    font-weight: 700;
+    font-size: 2.8em; /* Larger title */
+    margin-bottom: 12px;
+    font-weight: 800; /* Bolder font */
+    letter-spacing: 1px;
 }
 
 .header p {
-    font-size: 1.2em;
-    opacity: 0.9;
-    margin-bottom: 20px;
+    font-size: 1.3em; /* Larger subtitle */
+    opacity: 0.95;
+    margin-bottom: 25px;
 }
 
 .calendar-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 20px; /* Increased gap */
+    margin-top: 25px;
 }
 
 .calendar-container input[type="date"] {
-    padding: 10px 15px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 10px;
-    background: rgba(255,255,255,0.1);
+    padding: 12px 20px; /* More padding */
+    border: 2px solid rgba(255,255,255,0.4); /* Slightly stronger border */
+    border-radius: 12px; /* More rounded */
+    background: rgba(255,255,255,0.15); /* Slightly less transparent */
     color: white;
-    font-size: 1.1em;
+    font-size: 1.2em; /* Larger font */
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0,0,0,0.2); /* Subtle text shadow */
 }
 
 .calendar-container input[type="date"]:focus {
     outline: none;
-    background: rgba(255,255,255,0.2);
-    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.7);
+    box-shadow: 0 0 15px rgba(255,255,255,0.3); /* Glow effect on focus */
 }
 
 .calendar-container input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
+    transform: scale(1.1); /* Slightly larger icon */
 }
 
 #currentDay {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: rgba(255,255,255,0.9);
-    background: rgba(255,255,255,0.1);
-    padding: 10px 15px;
-    border-radius: 10px;
+    font-size: 1.2em; /* Larger font */
+    font-weight: 700;
+    color: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.15);
+    padding: 12px 20px;
+    border-radius: 12px;
     backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+/* Main Content Layout */
 .main-content {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: 20px;
-    padding: 30px;
+    grid-template-columns: 1fr 2fr 1fr; /* Desktop default */
+    gap: 30px; /* Increased gap */
+    padding: 35px; /* Increased padding */
+}
+
+/* Sidebar and Panels */
+.sidebar, .right-panel, .schedule-display {
+    background: #f8f9fa; /* Consistent light background */
+    padding: 30px; /* More padding */
+    border-radius: 20px; /* More rounded corners */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Consistent shadow */
 }
 
 .sidebar {
-    background: #f8f9fa;
-    padding: 25px;
-    border-radius: 15px;
-    border-left: 5px solid #667eea;
+    border-left: 6px solid #009ffd; /* Thicker, vibrant blue border */
 }
 
-.sidebar h3 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.5em;
+.right-panel {
+    border-right: 6px solid #28a745; /* Thicker, vibrant green border */
+    height: fit-content; /* Adjusts height to content */
 }
 
+h3, h4 {
+    color: #2c3e50; /* Darker, more prominent heading color */
+    margin-bottom: 25px;
+    font-size: 1.6em; /* Larger headings */
+    font-weight: 700;
+    text-align: center; /* Center align all main headings */
+}
+.sidebar h3, .schedule-display h3, .right-panel h4 {
+    text-align: center; /* Ensure all main headings are centered */
+}
+
+
+/* Fixed Schedule Display */
 .fixed-schedule {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    background: white; /* Still white for inner clarity */
+    border-radius: 15px; /* Slightly more rounded */
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .fixed-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    padding: 12px 0; /* More vertical padding */
+    border-bottom: 1px solid #e0e0e0; /* Lighter border */
 }
 
 .fixed-item:last-child {
@@ -121,8 +172,8 @@ body {
 
 .fixed-item .time {
     font-weight: bold;
-    color: #667eea;
-    font-size: 0.9em;
+    color: #009ffd; /* Matches sidebar border */
+    font-size: 1em;
 }
 
 .fixed-item .activity {
@@ -130,393 +181,453 @@ body {
     font-weight: 500;
 }
 
+.fixed-item .delete-fixed {
+    background: #dc3545; /* Bootstrap-like red */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background 0.3s ease, transform 0.2s;
+}
+
+.fixed-item .delete-fixed:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+/* Task Input Forms */
 .task-input {
     background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    margin-bottom: 20px; /* Added margin for separation */
+    border-radius: 15px;
+    padding: 25px; /* Increased padding */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
 }
 
 .task-input h4 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+    color: #2c3e50;
+    text-align: left; /* Align inner headings left */
 }
 
 .input-group {
     display: flex;
-    gap: 10px;
+    gap: 15px; /* Increased gap */
+    margin-bottom: 18px;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.input-group input[type="time"],
+.input-group input[type="number"],
+.task-input input[type="text"],
+.priority-group select {
+    flex: 1;
+    padding: 14px; /* More padding */
+    border: 2px solid #e0e0e0;
+    border-radius: 10px; /* More rounded */
+    font-size: 1.05em; /* Slightly larger font */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus,
+.task-input input[type="text"]:focus,
+.priority-group select:focus,
+.notes-textarea:focus {
+    outline: none;
+    border-color: #009ffd; /* Focus border matches theme */
+    box-shadow: 0 0 10px rgba(0, 159, 253, 0.2); /* Subtle glow */
+}
+
+.task-input input[type="text"] {
+    width: 100%; /* Ensure it takes full width */
     margin-bottom: 15px;
 }
 
-.input-group input {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: border-color 0.3s;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
 .add-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #009ffd, #2a2a72); /* Cooler gradient for buttons */
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
+    padding: 14px 30px; /* More padding */
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s;
+    font-weight: 700; /* Bolder text */
+    font-size: 1em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 159, 253, 0.3); /* Subtle shadow */
 }
 
 .add-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 159, 253, 0.4);
 }
 
-.schedule-display {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+/* Specific button overrides by style attribute - target these with more specificity if needed */
+.add-btn[style*="background: rgb(39, 174, 96);"] { /* "Add via Prompt" button */
+    background: linear-gradient(90deg, #28a745, #218838) !important;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3) !important;
+}
+.add-btn[style*="background: rgb(39, 174, 96);"]:hover {
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4) !important;
 }
 
+.add-btn[style*="background: rgb(231, 76, 60);"] { /* "Reset Default" button */
+    background: linear-gradient(90deg, #dc3545, #c82333) !important;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3) !important;
+}
+.add-btn[style*="background: rgb(231, 76, 60);"]:hover {
+    box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4) !important;
+}
+
+
+/* Task List (in sidebar) */
+#taskList .fixed-item {
+    background: #fdfdfd; /* Lighter background for task items */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+#taskList .fixed-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Schedule Display (Timeline) */
 .schedule-display h3 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8em; /* Larger heading */
 }
 
 .timeline {
     position: relative;
-    padding-left: 30px;
+    padding-left: 40px; /* More space for the line and dots */
 }
 
 .timeline::before {
     content: '';
     position: absolute;
-    left: 15px;
+    left: 18px; /* Center the line better */
     top: 0;
     bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, #667eea, #764ba2);
+    width: 3px; /* Thicker line */
+    background: linear-gradient(to bottom, #009ffd, #2a2a72); /* Cooler gradient line */
+    border-radius: 2px;
 }
 
 .timeline-item {
-    position: relative;
+    position: relative; /* Added for correct positioning of ::before */
     margin-bottom: 20px;
     background: #f8f9fa;
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin-left: 20px;
-    transition: all 0.3s;
-    display: flex; /* Added for alignment of delete button */
-    justify-content: space-between; /* Added for alignment of delete button */
-    align-items: center; /* Added for alignment of delete button */
+    padding: 18px 25px; /* More padding */
+    border-radius: 15px; /* More rounded */
+    margin-left: 30px; /* Adjust margin for line */
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Consistent shadow */
 }
 
 .timeline-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transform: translateX(8px); /* More pronounced hover effect */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Stronger hover shadow */
 }
 
 .timeline-item::before {
-    content: '';
+    content: ''; /* Ensure content for pseudo-element */
     position: absolute;
-    left: -35px;
-    top: 20px;
-    width: 10px;
-    height: 10px;
+    left: -48px; /* Position dot correctly relative to timeline item's left edge */
+    top: 25px; /* Vertically center dot */
+    width: 12px; /* Larger dot */
+    height: 12px; /* Larger dot */
     border-radius: 50%;
-    background: #667eea;
+    border: 2px solid white; /* White border for dot */
+    box-shadow: 0 0 10px rgba(0,0,0,0.3); /* Dot shadow */
 }
 
+/* Timeline Item Colors */
 .timeline-item.fixed {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    background: linear-gradient(135deg, #fc6767, #ec008c); /* Header-like vibrant red/pink */
     color: white;
 }
-
 .timeline-item.fixed::before {
-    background: #ff6b6b;
+    background: #ec008c; /* Matches end color of fixed gradient */
 }
 
 .timeline-item.task {
-    background: linear-gradient(135deg, #51cf66, #37b24d);
+    background: linear-gradient(135deg, #28a745, #1d7e35); /* Stronger green for tasks */
     color: white;
 }
-
 .timeline-item.task::before {
-    background: #51cf66;
+    background: #1d7e35; /* Matches end color of task gradient */
 }
 
 .timeline-item.free {
-    background: linear-gradient(135deg, #ffd93d, #ffb74d);
+    background: linear-gradient(135deg, #ffd700, #ffa500); /* Golden yellow for free time */
     color: #333;
 }
-
 .timeline-item.free::before {
-    background: #ffd93d;
+    background: #ffa500; /* Matches end color of free gradient */
+}
+
+/* Task Completion */
+.task-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Allows it to take available space */
+}
+
+.task-checkbox {
+    margin-right: 15px;
+    min-width: 20px; /* Ensure checkbox is visible */
+    min-height: 20px;
+    cursor: pointer;
+    accent-color: #1d7e35; /* Color for checked state */
+}
+
+.timeline-item.task.completed {
+    opacity: 0.7; /* Dim completed tasks */
+    text-decoration: line-through; /* Strikethrough */
+    background: linear-gradient(135deg, #b0bec5, #90a4ae); /* Greyed out for completed */
+    color: #4a4a4a;
+}
+.timeline-item.task.completed::before {
+    background: #78909c; /* Darker grey dot */
+    border-color: #aebacd;
+}
+
+.activity-details {
+    flex-grow: 1;
 }
 
 .time-slot {
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 0.95em;
     margin-bottom: 5px;
+    color: inherit; /* Inherit color from parent timeline-item */
+    opacity: 0.8;
 }
 
 .activity-name {
-    font-size: 1.1em;
+    font-size: 1.15em;
     font-weight: 600;
-}
-
-.delete-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.8em;
-    margin-left: 10px;
-    transition: background 0.3s;
-}
-
-.priority-group {
-    margin-bottom: 15px;
-}
-
-.priority-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #333;
-}
-
-.priority-group select {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1em;
-    background: white;
-    cursor: pointer;
-    transition: border-color 0.3s;
-}
-
-.priority-group select:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.priority-high {
-    border-left: 4px solid #e74c3c !important;
-    background: linear-gradient(135deg, #ffe5e5, #fff0f0) !important;
-}
-
-.priority-medium {
-    border-left: 4px solid #f39c12 !important;
-    background: linear-gradient(135deg, #fff3e0, #fffbf0) !important;
-}
-
-.priority-low {
-    border-left: 4px solid #667eea !important;
-    background: linear-gradient(135deg, #e8f4f8, #f0f8ff) !important;
+    color: inherit; /* Inherit color from parent timeline-item */
 }
 
 .task-priority-badge {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.8em;
-    font-weight: 600;
+    display: inline-block; /* Ensure it stays on one line with text */
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.75em;
+    font-weight: 700;
     margin-left: 10px;
+    text-transform: uppercase;
+    white-space: nowrap; /* Prevent badge text from wrapping */
 }
 
 .priority-high-badge {
-    background: #e74c3c;
+    background: #c0392b; /* Darker red */
     color: white;
 }
 
 .priority-medium-badge {
-    background: #f39c12;
+    background: #d35400; /* Darker orange */
     color: white;
 }
 
-.fixed-item .delete-fixed {
-    background: #e74c3c;
+.priority-low-badge {
+    background: #007bff; /* Standard blue */
     color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.7em;
-    transition: background 0.3s;
 }
 
-.fixed-item .delete-fixed:hover {
-    background: #c0392b;
-}
-
-.timeline-item.task.priority-high-task {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    border-left: 4px solid #a93226;
-}
-
-.timeline-item.task.priority-medium-task {
-    background: linear-gradient(135deg, #f39c12, #d68910);
-    border-left: 4px solid #b7950b;
-}
-
-.timeline-item.task.priority-low-task {
-    background: linear-gradient(135deg, #667eea, #5a67d8);
-    border-left: 4px solid #4c51bf;
-}
-
-.delete-btn:hover {
-    background: #c0392b;
-}
-
-.right-panel {
-    background: #f8f9fa;
+/* Right Panel */
+.motivation-section {
+    background: linear-gradient(135deg, #2a2a72, #009ffd); /* Matches body background */
+    color: white;
     padding: 25px;
     border-radius: 15px;
-    border-right: 5px solid #51cf66;
-    height: fit-content;
-}
-
-.motivation-section {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(42, 42, 114, 0.3);
 }
 
 .quote-text {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-style: italic;
-    margin-bottom: 10px;
-    line-height: 1.4;
+    margin-bottom: 12px;
+    line-height: 1.5;
 }
 
 .quote-author {
-    font-size: 0.9em;
-    opacity: 0.8;
+    font-size: 1em;
+    opacity: 0.85;
     font-weight: 600;
 }
 
 .new-quote-btn {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.25);
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 0.8em;
-    margin-top: 10px;
-    transition: background 0.3s;
+    font-size: 0.9em;
+    margin-top: 15px;
+    transition: background 0.3s ease, transform 0.2s;
+    font-weight: 600;
 }
 
 .new-quote-btn:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.4);
+    transform: translateY(-2px);
 }
 
+/* Quick Links Section */
+.quick-links {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.quick-links h4 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.link-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Increased gap */
+    flex-wrap: wrap;
+}
+
+.link-icon {
+    width: 55px; /* Larger icons */
+    height: 55px; /* Larger icons */
+    border-radius: 50%;
+    background-color: #e6f7ff; /* Light blue background for icons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15); /* Stronger shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.link-icon:hover {
+    transform: translateY(-5px) rotate(5deg); /* More dynamic hover */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    background-color: #cceeff; /* Slightly darker on hover */
+}
+
+.link-icon img {
+    width: 65%; /* Slightly smaller images inside the circle */
+    height: 65%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+
+/* Notes Section */
 .notes-section {
     background: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .notes-section h4 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.2em;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .notes-textarea {
     width: 100%;
-    min-height: 120px;
-    padding: 12px;
+    min-height: 150px; /* Taller textarea */
+    padding: 15px; /* More padding */
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: 10px;
     font-family: inherit;
-    font-size: 0.95em;
+    font-size: 1em;
     resize: vertical;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .notes-textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #009ffd; /* Matches new theme color */
 }
 
+/* Mood Tracker */
 .mood-tracker {
     background: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .mood-tracker h4 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.2em;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .mood-options {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+    justify-content: space-around; /* Space out emojis evenly */
+    margin-bottom: 20px;
 }
 
 .mood-emoji {
-    font-size: 2em;
+    font-size: 2.5em; /* Larger emojis */
     cursor: pointer;
-    padding: 10px;
+    padding: 12px;
     border-radius: 50%;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    transform-origin: center center;
 }
 
 .mood-emoji:hover {
-    background: #f0f8ff;
-    transform: scale(1.1);
+    background: #e6f7ff; /* Light blue on hover */
+    transform: scale(1.2); /* More pronounced scale */
 }
 
 .mood-emoji.selected {
-    background: #667eea;
-    transform: scale(1.2);
+    background: #009ffd; /* Vibrant blue when selected */
+    transform: scale(1.3); /* Even larger when selected */
+    box-shadow: 0 0 15px rgba(0, 159, 253, 0.4); /* Glow when selected */
 }
 
+#moodMessage {
+    color: #4a4a4a; /* Darker text for message */
+    font-size: 1em;
+    font-weight: 500;
+}
+
+/* Stats Section */
 .stats-section {
     background: white;
-    border-radius: 10px;
-    padding: 20px;
+    border-radius: 15px;
+    padding: 25px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .stats-section h4 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.2em;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .stat-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .stat-item:last-child {
@@ -524,60 +635,308 @@ body {
 }
 
 .stat-label {
-    color: #666;
-    font-size: 0.9em;
+    color: #555; /* Slightly darker */
+    font-size: 1em;
 }
 
 .stat-value {
-    font-weight: bold;
-    color: #333;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 1.1em;
 }
 
 .productivity-bar {
-    width: 100%;
-    height: 8px;
-    background: #e0e0e0;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 10px;
+    height: 10px; /* Thicker bar */
+    border-radius: 5px; /* More rounded */
+    margin-top: 15px;
 }
 
 .productivity-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #51cf66, #37b24d);
+    height: 100%; /* Ensure it fills the bar */
+    background: linear-gradient(90deg, #28a745, #1d7e35); /* Consistent green gradient */
     transition: width 0.3s ease;
 }
+.productivity-bar + div { /* Selects the div containing Productivity: X% */
+    text-align: center;
+    margin-top: 10px; /* Adjusted margin */
+    font-size: 0.95em; /* Slightly larger font */
+    color: #555;
+}
 
+
+/* ======================================= */
+/* RESPONSIVE STYLES             */
+/* ======================================= */
+
+/* For Tablets (Portrait) and smaller Laptops */
 @media (max-width: 1024px) {
     .main-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Stack all columns into a single column */
+        gap: 25px; /* Slightly reduced gap */
+        padding: 30px; /* Reduced padding */
     }
     
     .right-panel {
-        order: -1;
+        order: -1; /* Move the right panel to the top when stacked */
+        border-right: none; /* Remove right border when it's not on the right */
+        border-top: 6px solid #28a745; /* Add a top border for separation */
+        margin-bottom: 25px; /* Add space between panels */
+    }
+
+    .sidebar {
+        border-left: none; /* Remove left border */
+        border-bottom: 6px solid #009ffd; /* Add a bottom border for separation */
+        margin-bottom: 25px; /* Add space between panels */
+    }
+
+    .schedule-display {
+        padding: 30px; /* Consistent padding */
+    }
+
+    /* Adjust main headings */
+    h3, h4 {
+        font-size: 1.5em; 
+        margin-bottom: 20px;
+    }
+    .sidebar h3, .schedule-display h3, .right-panel h4 {
+        text-align: left; /* Realign headings to left when stacked in single column */
+    }
+
+    .task-input h4, .notes-section h4, .mood-tracker h4, .stats-section h4 {
+        font-size: 1.2em; /* Smaller inner headings */
+    }
+
+    /* Adjust button padding for stacked layout */
+    .add-btn {
+        padding: 12px 20px;
+        font-size: 0.95em;
     }
 }
 
+/* For larger Phones (Landscape) and smaller Tablets (Portrait) */
 @media (max-width: 768px) {
+    body {
+        padding: 15px; /* Less padding around the whole body */
+    }
+    .container {
+        border-radius: 15px; /* Less rounded container */
+        padding: 0; /* Remove container padding if any was added, rely on inner padding */
+    }
+    .header {
+        padding: 30px 20px; /* Reduced header padding */
+    }
     .header h1 {
-        font-size: 2em;
+        font-size: 2.2em; /* Smaller main title */
     }
-    
-    .input-group {
-        flex-direction: column;
+    .header p {
+        font-size: 1.1em; /* Smaller subtitle */
     }
-    
     .calendar-container {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: column; /* Stack date picker and day */
+        gap: 10px; /* Smaller gap */
+    }
+    .calendar-container input[type="date"], 
+    #currentDay {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+
+    .main-content {
+        padding: 20px; /* Reduced overall content padding */
+        gap: 20px;
     }
     
+    .sidebar, .right-panel, .schedule-display {
+        padding: 20px; /* Reduced panel padding */
+        border-radius: 15px; /* Less rounded panels */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.07); /* Slightly lighter shadow */
+    }
+
+    /* Headings adjustments */
+    h3, h4 {
+        font-size: 1.3em;
+        margin-bottom: 18px;
+    }
+    .task-input h4, .notes-section h4, .mood-tracker h4, .stats-section h4 {
+        font-size: 1.1em;
+    }
+
+    /* Input group (buttons and fields) adjustments */
+    .input-group {
+        flex-direction: column; /* Ensure elements stack */
+        gap: 10px; /* Smaller gap */
+        margin-bottom: 15px;
+    }
+    .input-group input, 
+    .task-input input[type="text"], 
+    .priority-group select, 
+    .add-btn {
+        padding: 10px 15px; /* Smaller padding for inputs/buttons */
+        font-size: 0.95em; /* Slightly smaller font for inputs/buttons */
+    }
+
+    /* Mood emojis */
     .mood-options {
-        justify-content: center;
-        gap: 10px;
+        justify-content: center; /* Center align emojis */
+        gap: 15px; /* Adjust gap for better spacing */
+        flex-wrap: wrap; /* Ensure emojis wrap */
     }
-    
     .mood-emoji {
-        font-size: 1.5em;
+        font-size: 2.2em; /* Slightly smaller emojis */
+        padding: 10px;
+    }
+    .mood-emoji.selected {
+        transform: scale(1.2); /* Adjusted scale */
+    }
+
+    /* Timeline adjustments */
+    .timeline {
+        padding-left: 30px; /* Less padding for timeline line */
+    }
+    .timeline::before {
+        left: 15px; /* Adjust line position */
+        width: 2px; /* Thinner line */
+    }
+    .timeline-item {
+        padding: 15px 20px; /* Reduced timeline item padding */
+        margin-left: 20px; /* Adjusted margin for line */
+    }
+    .timeline-item::before {
+        left: -40px; /* Adjusted dot position */
+        top: 20px; /* Adjusted dot vertical position */
+        width: 10px; /* Smaller dot */
+        height: 10px; /* Smaller dot */
+    }
+    .time-slot {
+        font-size: 0.9em; /* Smaller time slot text */
+    }
+    .activity-name {
+        font-size: 1.05em; /* Slightly smaller activity name */
+    }
+    .task-priority-badge {
+        font-size: 0.7em; /* Smaller badge text */
+        padding: 3px 8px; /* Smaller badge padding */
+    }
+    .task-checkbox {
+        min-width: 18px;
+        min-height: 18px;
+        margin-right: 10px;
+    }
+
+    /* Quick links icon size */
+    .link-icon {
+        width: 45px;
+        height: 45px;
+    }
+    .link-icon img {
+        width: 60%;
+        height: 60%;
     }
 }
+
+/* For very small Phones (Portrait) */
+@media (max-width: 480px) {
+    body {
+        padding: 10px; /* Minimal padding on very small screens */
+    }
+    .container {
+        border-radius: 10px; /* Even less rounded container */
+    }
+    .header {
+        padding: 20px 10px;
+    }
+    .header h1 {
+        font-size: 1.8em; /* Even smaller main title */
+    }
+    .header p {
+        font-size: 0.9em; /* Smallest subtitle */
+    }
+    .calendar-container {
+        gap: 8px;
+    }
+    .calendar-container input[type="date"], 
+    #currentDay {
+        font-size: 0.9em;
+        padding: 6px 10px;
+    }
+
+    .main-content {
+        padding: 15px; /* Minimal content padding */
+        gap: 15px;
+    }
+    
+    .sidebar, .right-panel, .schedule-display {
+        padding: 15px; /* Minimal panel padding */
+        border-radius: 10px; /* Even less rounded panels */
+    }
+
+    h3, h4 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+    .task-input h4, .notes-section h4, .mood-tracker h4, .stats-section h4 {
+        font-size: 1em;
+    }
+
+    .input-group {
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .input-group input, 
+    .task-input input[type="text"], 
+    .priority-group select, 
+    .add-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .mood-options {
+        gap: 10px;
+    }
+    .mood-emoji {
+        font-size: 1.8em;
+        padding: 8px;
+    }
+    .mood-emoji.selected {
+        transform: scale(1.15);
+    }
+
+    .timeline {
+        padding-left: 20px; /* Very little padding for line */
+    }
+    .timeline::before {
+        left: 10px; /* Adjust line position */
+        width: 1px; /* Thinnest line */
+    }
+    .timeline-item {
+        padding: 10px 15px; /* Minimal timeline item padding */
+        margin-left: 15px; /* Adjusted margin */
+    }
+    .timeline-item::before {
+        left: -30px; /* Adjusted dot position */
+        top: 15px; /* Adjusted dot vertical position */
+        width: 8px; /* Smallest dot */
+        height: 8px; /* Smallest dot */
+    }
+    .time-slot {
+        font-size: 0.8em; /* Smallest time slot text */
+    }
+    .activity-name {
+        font-size: 0.95em; /* Smallest activity name */
+    }
+    .task-priority-badge {
+        font-size: 0.65em;
+        padding: 2px 6px;
+        margin-left: 5px; /* Less margin */
+    }
+
+    .link-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .link-icon img {
+        width: 55%;
+        height: 55%;
+    }
+}
+```
