@@ -30,7 +30,7 @@ const defaultFixedSchedule = [
 
 let fixedSchedule = [...defaultFixedSchedule];
 let dailyTasks = [];
-let generatedSchedule = [];
+
 // Use localStorage for basic data persistence
 let scheduleData = JSON.parse(localStorage.getItem('dailySchedulePlanner')) || {}; 
 
@@ -45,7 +45,7 @@ function timeToMinutes(time) {
 
 // Helper function to convert minutes from midnight to "HH:MM"
 function minutesToTime(minutes) {
-    const hours = Math.floor(minutes / 60) % 24; // Use modulo 24 for overflow (e.g., 25:00 becomes 01:00)
+    const hours = Math.floor(minutes / 60) % 24; 
     const mins = minutes % 60;
     return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
 }
@@ -58,40 +58,42 @@ function getNewQuote() {
 
 function saveNotes() {
     const selectedDate = document.getElementById('selectedDate').value;
-    const notes = document.getElementById('dailyNotes').value;
-    
+    if (!selectedDate) return; 
+
     if (!scheduleData[selectedDate]) {
         scheduleData[selectedDate] = {};
     }
-    scheduleData[selectedDate].notes = notes;
+    scheduleData[selectedDate].notes = document.getElementById('dailyNotes').value;
     localStorage.setItem('dailySchedulePlanner', JSON.stringify(scheduleData));
 }
 
 function loadNotes() {
     const selectedDate = document.getElementById('selectedDate').value;
+    if (!selectedDate) return; 
+
     const notes = scheduleData[selectedDate]?.notes || '';
     document.getElementById('dailyNotes').value = notes;
 }
 
 function setMood(mood) {
     const selectedDate = document.getElementById('selectedDate').value;
+    if (!selectedDate) return; 
     
-    // Remove previous selection
     document.querySelectorAll('.mood-emoji').forEach(emoji => {
         emoji.classList.remove('selected');
     });
     
-    // Add selection to clicked mood
-    document.querySelector(`[data-mood="${mood}"]`).classList.add('selected');
+    const selectedEmoji = document.querySelector(`[data-mood="${mood}"]`);
+    if (selectedEmoji) {
+        selectedEmoji.classList.add('selected');
+    }
     
-    // Save mood
     if (!scheduleData[selectedDate]) {
         scheduleData[selectedDate] = {};
     }
     scheduleData[selectedDate].mood = mood;
     localStorage.setItem('dailySchedulePlanner', JSON.stringify(scheduleData));
     
-    // Show mood message
     const moodMessages = {
         excited: "Amazing energy! Channel it into your tasks! 🚀",
         happy: "Great mood! Perfect for tackling your schedule! 😊",
@@ -105,16 +107,17 @@ function setMood(mood) {
 
 function loadMood() {
     const selectedDate = document.getElementById('selectedDate').value;
+    if (!selectedDate) return; 
+
     const mood = scheduleData[selectedDate]?.mood;
     
-    // Clear previous selection
     document.querySelectorAll('.mood-emoji').forEach(emoji => {
         emoji.classList.remove('selected');
     });
     
     if (mood) {
         const selectedEmoji = document.querySelector(`[data-mood="${mood}"]`);
-        if (selectedEmoji) { // Check if emoji exists before adding class
+        if (selectedEmoji) { 
             selectedEmoji.classList.add('selected');
         }
         const moodMessages = {
@@ -135,11 +138,9 @@ function updateStats() {
     const totalTime = dailyTasks.reduce((sum, task) => sum + task.duration, 0);
     const highPriorityCount = dailyTasks.filter(task => task.priority === 'high').length;
     
-    // Calculate free time (24 hours minus fixed schedule and tasks)
-    const fixedTime = fixedSchedule.reduce((sum, item) => item.time === '23:00' && item.duration === 7 ? sum + 7 : sum + item.duration, 0); // Special handling for sleep
+    const fixedTime = fixedSchedule.reduce((sum, item) => item.time === '23:00' && item.duration === 7 ? sum + 7 : sum + item.duration, 0); 
     const freeTime = Math.max(0, 24 - fixedTime - totalTime);
     
-    // Calculate productivity (tasks time / available time * 100)
     const availableTime = 24 - fixedTime;
     const productivity = availableTime > 0 ? Math.round((totalTime / availableTime) * 100) : 0;
     
@@ -151,36 +152,41 @@ function updateStats() {
     document.getElementById('productivityFill').style.width = productivity + '%';
 }
 
-// Initialize calendar
 function initializeCalendar() {
     const today = new Date();
     const dateInput = document.getElementById('selectedDate');
     const currentDay = document.getElementById('currentDay');
     
-    // Set today's date
-    dateInput.value = today.toISOString().split('T')[0];
+    const todayISO = today.toISOString().split('T')[0];
+    dateInput.value = todayISO;
     
-    // Update day display
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     currentDay.textContent = dayNames[today.getDay()];
     
-    // Load schedule for today
     loadScheduleForDate();
 }
 
 function loadScheduleForDate() {
-    const selectedDate = document.getElementById('selectedDate').value;
-    const date = new Date(selectedDate);
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const selectedDateValue = document.getElementById('selectedDate').value;
+    const date = new Date(selectedDateValue);
     
+    if (isNaN(date.getTime())) { 
+        console.error("Invalid date selected:", selectedDateValue);
+        document.getElementById('currentDay').textContent = 'Invalid Date';
+        // As an alternative to just logging, you could reset to today's date
+        // document.getElementById('selectedDate').value = new Date().toISOString().split('T')[0];
+        // loadScheduleForDate(); // Re-run for today
+        return; 
+    }
+
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     document.getElementById('currentDay').textContent = dayNames[date.getDay()];
     
-    // Load data for this date
-    if (scheduleData[selectedDate]) {
-        fixedSchedule = scheduleData[selectedDate].fixed ? [...scheduleData[selectedDate].fixed] : [...defaultFixedSchedule];
-        dailyTasks = scheduleData[selectedDate].tasks ? [...scheduleData[selectedDate].tasks] : [];
+    if (scheduleData[selectedDateValue]) {
+        fixedSchedule = scheduleData[selectedDateValue].fixed ? [...scheduleData[selectedDateValue].fixed] : [...defaultFixedSchedule];
+        dailyTasks = scheduleData[selectedDateValue].tasks ? [...scheduleData[selectedDateValue].tasks] : [];
     } else {
-        fixedSchedule = [...defaultFixedSchedule]; // Reset to default fixed schedule for new dates
+        fixedSchedule = [...defaultFixedSchedule];
         dailyTasks = [];
     }
     
@@ -194,6 +200,8 @@ function loadScheduleForDate() {
 
 function saveScheduleForDate() {
     const selectedDate = document.getElementById('selectedDate').value;
+    if (!selectedDate) return; 
+
     scheduleData[selectedDate] = {
         fixed: [...fixedSchedule],
         tasks: [...dailyTasks],
@@ -211,17 +219,12 @@ function updateFixedScheduleDisplay() {
         const fixedItem = document.createElement('div');
         fixedItem.className = 'fixed-item';
         
-        // Handle overnight fixed activities (like sleep)
         let endTimeMinutes = timeToMinutes(item.time) + (item.duration * 60);
-        let endTimeDisplay = minutesToTime(endTimeMinutes);
+        let timeDisplay = `${item.time} - ${minutesToTime(endTimeMinutes)}`;
 
-        // If end time goes past midnight (24:00), display it as the next day's time
         if (endTimeMinutes >= 24 * 60) {
-            endTimeDisplay = minutesToTime(endTimeMinutes % (24 * 60)); // Wrap around for next day
-             // Optional: Add a visual indicator like "+1 day" if needed
+            timeDisplay = `${item.time} - ${minutesToTime(endTimeMinutes % (24 * 60))} (Next day)`;
         }
-
-        const timeDisplay = `${item.time} - ${endTimeDisplay}`;
         
         fixedItem.innerHTML = `
             <span class="time">${timeDisplay}</span>
@@ -243,7 +246,6 @@ function addFixedActivity() {
         return;
     }
 
-    // Add emoji if not present (simple check for common emoji range or existing emoji)
     const activityWithEmoji = activity.match(/[\u{1F000}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u) ? activity : `⭐ ${activity}`;
 
     fixedSchedule.push({
@@ -253,7 +255,6 @@ function addFixedActivity() {
         type: 'fixed'
     });
 
-    // Sort by time
     fixedSchedule.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
 
     document.getElementById('fixedTime').value = '';
@@ -263,7 +264,7 @@ function addFixedActivity() {
     updateFixedScheduleDisplay();
     updateStats();
     saveScheduleForDate();
-    generateSchedule(); // Regenerate full schedule after adding fixed activity
+    generateSchedule(); 
 }
 
 function deleteFixedActivity(index) {
@@ -271,7 +272,7 @@ function deleteFixedActivity(index) {
     updateFixedScheduleDisplay();
     updateStats();
     saveScheduleForDate();
-    generateSchedule(); // Regenerate full schedule after deleting fixed activity
+    generateSchedule(); 
 }
 
 function resetToDefault() {
@@ -279,16 +280,16 @@ function resetToDefault() {
     updateFixedScheduleDisplay();
     updateStats();
     saveScheduleForDate();
-    generateSchedule(); // Regenerate full schedule after resetting
+    generateSchedule(); 
 }
 
 function updateTaskList() {
     const taskList = document.getElementById('taskList');
-    taskList.innerHTML = ''; // Clear current tasks
+    taskList.innerHTML = ''; 
 
     dailyTasks.forEach((task, index) => {
         const taskItem = document.createElement('div');
-        taskItem.className = `fixed-item task-list-item priority-${task.priority}`; // Reusing fixed-item for styling consistency
+        taskItem.className = `fixed-item task-list-item priority-${task.priority}`; 
         taskItem.innerHTML = `
             <span class="activity">${task.name} <span class="task-priority-badge priority-${task.priority}-badge">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</span></span>
             <span class="time">${task.duration}h</span>
@@ -315,105 +316,150 @@ function addTask() {
         type: 'task'
     });
 
-    // Clear input fields
     document.getElementById('taskName').value = '';
     document.getElementById('taskDuration').value = '';
-    document.getElementById('taskPriority').value = 'medium'; // Reset to default priority
+    document.getElementById('taskPriority').value = 'medium'; 
 
     updateTaskList();
     updateStats();
     saveScheduleForDate();
-    generateSchedule(); // Regenerate full schedule
+    generateSchedule(); 
 }
 
 function deleteTask(index) {
-    dailyTasks.splice(index, 1); // Remove task from array
-    updateTaskList(); // Update display
+    dailyTasks.splice(index, 1); 
+    updateTaskList(); 
     updateStats();
     saveScheduleForDate();
-    generateSchedule(); // Regenerate full schedule
+    generateSchedule(); 
 }
 
 function generateSchedule() {
-    let availableTimeSlots = Array(24 * 60).fill(true); // Representing minutes in a day
-    generatedSchedule = [];
+    let availableTimeSlots = Array(24 * 60).fill(true); 
+    let scheduleItemsForDisplay = []; 
 
-    // Mark fixed schedule times as unavailable
+    // Process fixed schedule items
     fixedSchedule.forEach(item => {
         let startMinutes = timeToMinutes(item.time);
-        let endMinutes = startMinutes + (item.duration * 60);
+        let durationMinutes = item.duration * 60;
+        let endMinutesAbsolute = startMinutes + durationMinutes;
 
-        if (endMinutes > 24 * 60) { // Handle overnight fixed activities
-            for (let i = startMinutes; i < 24 * 60; i++) {
+        if (endMinutesAbsolute > 24 * 60) { 
+            let part1EndMinutes = 24 * 60;
+            for (let i = startMinutes; i < part1EndMinutes; i++) {
                 availableTimeSlots[i] = false;
             }
-            for (let i = 0; i < endMinutes - (24 * 60); i++) {
+            scheduleItemsForDisplay.push({ 
+                ...item, 
+                start: startMinutes, 
+                end: part1EndMinutes, 
+                isOvernightStart: true 
+            });
+
+            let part2EndMinutes = endMinutesAbsolute % (24 * 60); 
+            for (let i = 0; i < part2EndMinutes; i++) {
                 availableTimeSlots[i] = false;
             }
-        } else {
-            for (let i = startMinutes; i < endMinutes; i++) {
+            scheduleItemsForDisplay.push({ 
+                ...item, 
+                start: 0, 
+                end: part2EndMinutes,
+                isOvernightEnd: true 
+            });
+
+        } else { 
+            for (let i = startMinutes; i < endMinutesAbsolute; i++) {
                 availableTimeSlots[i] = false;
             }
+            scheduleItemsForDisplay.push({ ...item, start: startMinutes, end: endMinutesAbsolute });
         }
-        generatedSchedule.push({ ...item, start: startMinutes, end: endMinutes, originalOrder: generatedSchedule.length });
     });
 
-    // Sort tasks by priority (high to low) and then by duration (longest first)
     const sortedTasks = [...dailyTasks].sort((a, b) => {
         const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
         if (priorityOrder[b.priority] !== priorityOrder[a.priority]) {
             return priorityOrder[b.priority] - priorityOrder[a.priority];
         }
-        return b.duration - a.duration; // Longest duration first for same priority
+        return b.duration - a.duration; 
     });
 
-    // Place tasks into available slots
-    sortedTasks.forEach(task => {
-        let taskDurationMinutes = task.duration * 60;
-        let placed = false;
+    // --- START: MODIFIED TASK PLACEMENT LOGIC FOR SPLITTING ---
+    sortedTasks.forEach(originalTask => {
+        let taskRemainingMinutes = originalTask.duration * 60;
+        
+        while (taskRemainingMinutes > 0) {
+            let foundSlotInThisPass = false;
+            let currentFreeSlotStart = -1;
+            
+            for (let i = 0; i < 24 * 60; i++) {
+                if (availableTimeSlots[i]) {
+                    if (currentFreeSlotStart === -1) { 
+                        currentFreeSlotStart = i;
+                    }
+                } else {
+                    if (currentFreeSlotStart !== -1) { 
+                        let currentFreeSlotLength = i - currentFreeSlotStart;
+                        if (currentFreeSlotLength > 0) {
+                            let minutesToPlace = Math.min(taskRemainingMinutes, currentFreeSlotLength);
+                            
+                            for (let j = 0; j < minutesToPlace; j++) {
+                                availableTimeSlots[currentFreeSlotStart + j] = false;
+                            }
 
-        // Find the earliest available continuous slot for the task
-        for (let i = 0; i <= (24 * 60) - taskDurationMinutes; i++) {
-            let isSlotAvailable = true;
-            for (let j = 0; j < taskDurationMinutes; j++) {
-                if (!availableTimeSlots[i + j]) {
-                    isSlotAvailable = false;
-                    i = i + j; // Jump ahead to avoid checking already occupied slots
-                    break;
+                            scheduleItemsForDisplay.push({
+                                ...originalTask, 
+                                start: currentFreeSlotStart,
+                                end: currentFreeSlotStart + minutesToPlace,
+                                type: 'task', 
+                            });
+
+                            taskRemainingMinutes -= minutesToPlace;
+                            foundSlotInThisPass = true;
+                            break; 
+                        }
+                    }
+                    currentFreeSlotStart = -1; 
                 }
             }
-            if (isSlotAvailable) {
-                // Mark slot as unavailable
-                for (let j = 0; j < taskDurationMinutes; j++) {
-                    availableTimeSlots[i + j] = false;
+
+            // Check for remaining free slot at the very end of the day if loop finished
+            if (!foundSlotInThisPass && currentFreeSlotStart !== -1 && taskRemainingMinutes > 0) {
+                let currentFreeSlotLength = (24 * 60) - currentFreeSlotStart;
+                let minutesToPlace = Math.min(taskRemainingMinutes, currentFreeSlotLength);
+
+                for (let j = 0; j < minutesToPlace; j++) {
+                    availableTimeSlots[currentFreeSlotStart + j] = false;
                 }
-                generatedSchedule.push({
-                    ...task,
-                    start: i,
-                    end: i + taskDurationMinutes
+
+                scheduleItemsForDisplay.push({
+                    ...originalTask,
+                    start: currentFreeSlotStart,
+                    end: currentFreeSlotStart + minutesToPlace,
+                    type: 'task',
                 });
-                placed = true;
+
+                taskRemainingMinutes -= minutesToPlace;
+                foundSlotInThisPass = true;
+            }
+
+            if (!foundSlotInThisPass && taskRemainingMinutes > 0) {
+                console.warn(`Task "${originalTask.name}" could not be fully placed. Remaining: ${taskRemainingMinutes / 60}h`);
+                break; 
+            }
+             if (taskRemainingMinutes <= 0) { 
                 break;
             }
         }
-
-        if (!placed) {
-            // If a task can't be placed continuously, try breaking it up (optional, more complex)
-            // For now, if it can't be placed, it's just not added to the generated schedule
-            console.warn(`Task "${task.name}" could not be fully placed.`);
-        }
     });
+    // --- END: MODIFIED TASK PLACEMENT LOGIC ---
 
-    // Sort the entire schedule by start time
-    generatedSchedule.sort((a, b) => a.start - b.start);
+    scheduleItemsForDisplay.sort((a, b) => a.start - b.start);
 
-    // Fill in free time gaps
     let currentTime = 0;
     const finalSchedule = [];
 
-    generatedSchedule.forEach(item => {
-        if (item.start > currentTime) {
-            // Add free time
+    scheduleItemsForDisplay.forEach(item => {
+        if (item.start > currentTime && !(item.start === 0 && item.isOvernightEnd && currentTime === 0)) {
             finalSchedule.push({
                 type: 'free',
                 activity: '🛋️ Free Time',
@@ -425,35 +471,27 @@ function generateSchedule() {
         currentTime = item.end;
     });
 
-    // Add remaining free time until end of day (or wrap around if fixed activity ends beyond midnight)
-    if (currentTime < 24 * 60) {
+    if (currentTime < 24 * 60) { 
         finalSchedule.push({
             type: 'free',
             activity: '🛋️ Free Time',
             start: currentTime,
-            end: 24 * 60
+            end: 24 * 60 
         });
     }
 
     displaySchedule(finalSchedule);
 }
 
-
 function displaySchedule(scheduleToDisplay) {
     const timeline = document.getElementById('timeline');
-    timeline.innerHTML = ''; // Clear current timeline
-
-    // Remove any items that are fixed activities going beyond midnight (e.g., sleep from 23:00 to 06:00)
-    // These are already handled by the start/end calculations and don't need a duplicate entry for the 'next day' portion
-    const filteredSchedule = scheduleToDisplay.filter(item => !(item.type === 'fixed' && timeToMinutes(item.time) + (item.duration * 60) > 24 * 60 && item.start < item.end));
-
+    timeline.innerHTML = ''; 
 
     let previousEndTime = 0;
-    filteredSchedule.forEach(item => {
+    scheduleToDisplay.forEach(item => {
         const itemStartMinutes = item.start;
         const itemEndMinutes = item.end;
 
-        // If there's a gap between the previous item and this one, it's free time
         if (itemStartMinutes > previousEndTime) {
             timeline.appendChild(createTimelineItem({
                 type: 'free',
@@ -467,13 +505,12 @@ function displaySchedule(scheduleToDisplay) {
         previousEndTime = itemEndMinutes;
     });
 
-    // Handle any remaining free time until midnight
-    if (previousEndTime < 24 * 60) {
+    if (previousEndTime < 24 * 60) { 
         timeline.appendChild(createTimelineItem({
             type: 'free',
             activity: '🛋️ Free Time',
             start: previousEndTime,
-            end: 24 * 60
+            end: 24 * 60 
         }));
     }
 }
@@ -487,23 +524,30 @@ function createTimelineItem(item) {
     let timeRange = '';
 
     if (item.type === 'fixed') {
-        // Fixed items get their time directly from 'time' and 'duration' for consistent display
-        let fixedEndTimeMinutes = timeToMinutes(item.time) + (item.duration * 60);
-        let fixedEndTimeDisplay = minutesToTime(fixedEndTimeMinutes);
-        if (fixedEndTimeMinutes >= 24 * 60) { // If it spans into the next day
-            fixedEndTimeDisplay = minutesToTime(fixedEndTimeMinutes % (24 * 60)); // Wrap around
-            timeRange = `${item.time} - ${fixedEndTimeDisplay} (Next day)`;
-        } else {
-            timeRange = `${item.time} - ${fixedEndTimeDisplay}`;
+        let displayStartTime = minutesToTime(item.start);
+        let displayEndTime = minutesToTime(item.end);
+
+        if (item.isOvernightStart) { 
+            timeRange = `${item.time} - 00:00 (Midnight)`; 
+        } else if (item.isOvernightEnd) { 
+            timeRange = `00:00 - ${displayEndTime} (Next day)`; 
+        } else { 
+            timeRange = `${displayStartTime} - ${displayEndTime}`;
         }
         contentHTML = `<span class="activity-name">${item.activity}</span>`;
     } else { // 'task' or 'free'
         timeRange = `${minutesToTime(item.start)} - ${minutesToTime(item.end)}`;
-        contentHTML = `<span class="activity-name">${item.activity}</span>`;
+        
         if (item.type === 'task') {
+            contentHTML = `<span class="activity-name">${item.name}</span>`; 
             itemClasses.push(`priority-${item.priority}-task`);
             contentHTML += `<span class="task-priority-badge priority-${item.priority}-badge">${item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}</span>`;
+            
+            // Note: deleteTaskFromTimeline will currently remove the *first* matching original task,
+            // not necessarily the specific segment. This is a known limitation with split tasks.
             contentHTML += `<button class="delete-btn" onclick="deleteTaskFromTimeline('${item.name}', ${item.duration}, '${item.priority}')">Remove</button>`;
+        } else if (item.type === 'free') {
+            contentHTML = `<span class="activity-name">${item.activity}</span>`; 
         }
     }
 
@@ -537,5 +581,5 @@ function deleteTaskFromTimeline(name, duration, priority) {
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     initializeCalendar();
-    getNewQuote(); // Display a random quote on load
+    getNewQuote(); 
 });
