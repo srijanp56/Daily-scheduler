@@ -1,4 +1,3 @@
-// Motivational quotes
 const motivationalQuotes = [
     { text: "The future depends on what you do today!", author: "Mahatma Gandhi" },
     { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
@@ -21,7 +20,7 @@ const motivationalQuotes = [
     { text: "Dream it. Believe it. Build it.", author: "Unknown" }
 ];
 
-// Default and custom fixed schedules
+
 const defaultFixedSchedule = [
     { time: '06:00', duration: 1, activity: '🏃‍♂️ Gym', type: 'fixed' },
     { time: '09:00', duration: 8, activity: '📚 College', type: 'fixed' },
@@ -31,19 +30,18 @@ const defaultFixedSchedule = [
 let fixedSchedule = [...defaultFixedSchedule];
 let dailyTasks = [];
 
-// Use localStorage for basic data persistence
+
 let scheduleData = JSON.parse(localStorage.getItem('dailySchedulePlanner')) || {}; 
 
-// Event Listener for date change
+
 document.getElementById('selectedDate').addEventListener('change', loadScheduleForDate);
 
-// Helper function to convert "HH:MM" to minutes from midnight
+
 function timeToMinutes(time) {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
 }
 
-// Helper function to convert minutes from midnight to "HH:MM"
 function minutesToTime(minutes) {
     const hours = Math.floor(minutes / 60) % 24; 
     const mins = minutes % 60;
@@ -173,9 +171,6 @@ function loadScheduleForDate() {
     if (isNaN(date.getTime())) { 
         console.error("Invalid date selected:", selectedDateValue);
         document.getElementById('currentDay').textContent = 'Invalid Date';
-        // As an alternative to just logging, you could reset to today's date
-        // document.getElementById('selectedDate').value = new Date().toISOString().split('T')[0];
-        // loadScheduleForDate(); // Re-run for today
         return; 
     }
 
@@ -338,7 +333,6 @@ function generateSchedule() {
     let availableTimeSlots = Array(24 * 60).fill(true); 
     let scheduleItemsForDisplay = []; 
 
-    // Process fixed schedule items
     fixedSchedule.forEach(item => {
         let startMinutes = timeToMinutes(item.time);
         let durationMinutes = item.duration * 60;
@@ -383,7 +377,6 @@ function generateSchedule() {
         return b.duration - a.duration; 
     });
 
-    // --- START: MODIFIED TASK PLACEMENT LOGIC FOR SPLITTING ---
     sortedTasks.forEach(originalTask => {
         let taskRemainingMinutes = originalTask.duration * 60;
         
@@ -421,8 +414,6 @@ function generateSchedule() {
                     currentFreeSlotStart = -1; 
                 }
             }
-
-            // Check for remaining free slot at the very end of the day if loop finished
             if (!foundSlotInThisPass && currentFreeSlotStart !== -1 && taskRemainingMinutes > 0) {
                 let currentFreeSlotLength = (24 * 60) - currentFreeSlotStart;
                 let minutesToPlace = Math.min(taskRemainingMinutes, currentFreeSlotLength);
@@ -451,7 +442,6 @@ function generateSchedule() {
             }
         }
     });
-    // --- END: MODIFIED TASK PLACEMENT LOGIC ---
 
     scheduleItemsForDisplay.sort((a, b) => a.start - b.start);
 
@@ -535,7 +525,7 @@ function createTimelineItem(item) {
             timeRange = `${displayStartTime} - ${displayEndTime}`;
         }
         contentHTML = `<span class="activity-name">${item.activity}</span>`;
-    } else { // 'task' or 'free'
+    } else { 
         timeRange = `${minutesToTime(item.start)} - ${minutesToTime(item.end)}`;
         
         if (item.type === 'task') {
@@ -543,8 +533,7 @@ function createTimelineItem(item) {
             itemClasses.push(`priority-${item.priority}-task`);
             contentHTML += `<span class="task-priority-badge priority-${item.priority}-badge">${item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}</span>`;
             
-            // Note: deleteTaskFromTimeline will currently remove the *first* matching original task,
-            // not necessarily the specific segment. This is a known limitation with split tasks.
+
             contentHTML += `<button class="delete-btn" onclick="deleteTaskFromTimeline('${item.name}', ${item.duration}, '${item.priority}')">Remove</button>`;
         } else if (item.type === 'free') {
             contentHTML = `<span class="activity-name">${item.activity}</span>`; 
@@ -559,10 +548,9 @@ function createTimelineItem(item) {
     return timelineItem;
 }
 
-// Function to delete a task specifically from the timeline display and underlying dailyTasks array
-// This is necessary because tasks in the timeline are copies, not directly linked to original indices.
+
 function deleteTaskFromTimeline(name, duration, priority) {
-    // Find the index of the task in the dailyTasks array
+   
     const indexToDelete = dailyTasks.findIndex(task => 
         task.name === name && 
         task.duration === duration && 
@@ -570,15 +558,15 @@ function deleteTaskFromTimeline(name, duration, priority) {
     );
 
     if (indexToDelete !== -1) {
-        dailyTasks.splice(indexToDelete, 1); // Remove task
-        updateTaskList(); // Update the task list display on the sidebar
-        updateStats(); // Update statistics
-        saveScheduleForDate(); // Save the updated daily tasks
-        generateSchedule(); // Regenerate and display the full schedule
+        dailyTasks.splice(indexToDelete, 1); 
+        updateTaskList(); 
+        updateStats(); 
+        saveScheduleForDate(); 
+        generateSchedule(); 
     }
 }
 
-// Initialize on load
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeCalendar();
     getNewQuote(); 
